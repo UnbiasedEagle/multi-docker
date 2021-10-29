@@ -10,10 +10,10 @@ script:
   - docker run -e CI=true unbiasedeagle/react-test npm run test
 
 after_success:
-  - docker built -t unbiasedeagle/multi-client:latest ./client
-  - docker built -t unbiasedeagle/multi-server:latest ./server
-  - docker built -t unbiasedeagle/multi-worker:latest ./worker
-  - docker built -t unbiasedeagle/multi-nginx:latest ./nginx
+  - docker build -t unbiasedeagle/multi-client:latest ./client
+  - docker build -t unbiasedeagle/multi-server:latest ./server
+  - docker build -t unbiasedeagle/multi-worker:latest ./worker
+  - docker build -t unbiasedeagle/multi-nginx:latest ./nginx
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker push unbiasedeagle/multi-client:latest
   - docker push unbiasedeagle/multi-server:latest
