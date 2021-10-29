@@ -1,0 +1,21 @@
+language: generic
+sudo: required
+
+services:
+  - 'docker'
+before_install:
+  - docker build -f ./client/Dockerfile.dev -t unbiasedeagle/react-test ./client
+
+script:
+  - docker run -e CI=true unbiasedeagle/react-test npm run test
+
+after_success:
+  - docker built -t unbiasedeagle/multi-client ./client
+  - docker built -t unbiasedeagle/multi-server ./server
+  - docker built -t unbiasedeagle/multi-worker ./worker
+  - docker built -t unbiasedeagle/multi-nginx ./nginx
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push unbiasedeagle/multi-client
+  - docker push unbiasedeagle/multi-server
+  - docker push unbiasedeagle/multi-nginx
+  - docker push unbiasedeagle/multi-worker
